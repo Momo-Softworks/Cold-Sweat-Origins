@@ -1,0 +1,24 @@
+{
+  "origin": "origins:blazeborn",
+  "attributes": [
+    {
+      "id": "cold_sweat:heat_dampening",
+      "value": 1
+    },
+    {
+      "id": "cold_sweat:heat_resistance",
+      "value": 1
+    },
+    {
+      "id": "cold_sweat:cold_dampening",
+      "value": -1
+    }
+  ],
+  "modifiers": [
+    {
+      "id": "cold_sweat:burning_point",
+      "operation": "addition",
+      "value": 3
+    }
+  ]
+}

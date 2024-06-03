@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.momosoftworks.cold_sweat_origins.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "ColdSweatOrigins.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
