@@ -6,12 +6,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
-public record OriginModifier(ResourceLocation origin, List<MappedAttribute> baseValues, List<AssignedAttributeModifier> modifiers)
+public record OriginModifier(ResourceLocation origin, List<MappedAttribute> baseValues, List<AssignedAttributeModifier> modifiers, List<ResourceLocation> immuneTempModifiers)
 {
     public static final Map<ResourceLocation, OriginModifier> ORIGIN_SETTINGS = new HashMap<>();
 
@@ -28,7 +25,8 @@ public record OriginModifier(ResourceLocation origin, List<MappedAttribute> base
 
     public static final Codec<OriginModifier> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("origin").forGetter(OriginModifier::origin),
-            Codec.list(ATTRIBUTE_CODEC).fieldOf("attributes").forGetter(OriginModifier::baseValues),
-            Codec.list(MODIFIER_CODEC).fieldOf("modifiers").forGetter(OriginModifier::modifiers)
+            ATTRIBUTE_CODEC.listOf().fieldOf("attributes").forGetter(OriginModifier::baseValues),
+            MODIFIER_CODEC.listOf().fieldOf("modifiers").forGetter(OriginModifier::modifiers),
+            ResourceLocation.CODEC.listOf().optionalFieldOf("immune_temp_modifiers", new ArrayList<>()).forGetter(OriginModifier::immuneTempModifiers)
     ).apply(instance, OriginModifier::new));
 }

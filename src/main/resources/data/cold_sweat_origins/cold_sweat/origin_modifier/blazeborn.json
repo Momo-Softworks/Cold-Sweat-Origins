@@ -20,5 +20,10 @@
       "operation": "addition",
       "value": 3
     }
+  ],
+  "immune_temp_modifiers": [
+    "cold_sweat:on_fire",
+    "cold_sweat:soulspring_lamp",
+    "cold_sweat:water"
   ]
 }

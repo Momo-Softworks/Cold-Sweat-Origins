@@ -30,8 +30,7 @@ public class PlayerOriginInit
                     {
                         OriginModifier.ORIGIN_SETTINGS.computeIfPresent(origin.location(), (org, settings) ->
                         {
-                            ColdSweatOrigins.LOGGER.info("Applying origin settings for " + origin.location() + " to " + player.getName().getString());
-                            ColdSweatOrigins.LOGGER.info("Player currently has " + player.getPersistentData().getString("Origin"));
+                            ColdSweatOrigins.LOGGER.info("Applying origin settings for %s to %s", origin.location(), player.getName().getString());
                             if (!player.getPersistentData().getString("Origin").equals(origin.location().toString()))
                             {
                                 for (Temperature.Trait trait : EntityTempManager.VALID_ATTRIBUTE_TYPES)
@@ -40,7 +39,6 @@ public class PlayerOriginInit
                                     attribute.removeModifiers();
                                     attribute.setBaseValue(attribute.getAttribute().getDefaultValue());
                                 }
-                                ColdSweatOrigins.LOGGER.info("Cleared old origin settings for " + player.getName().getString());
                             }
                             else return settings;
 

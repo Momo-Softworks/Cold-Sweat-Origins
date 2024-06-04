@@ -1,0 +1,19 @@
+{
+  "origin": "origins:merling",
+  "attributes": [
+    {
+      "id": "cold_sweat:cold_dampening",
+      "value": 0.2
+    }
+  ],
+  "modifiers": [
+    {
+      "id": "cold_sweat:freezing_point",
+      "operation": "addition",
+      "value": -0.2
+    }
+  ],
+  "immune_temp_modifiers": [
+    "cold_sweat:water"
+  ]
+}
