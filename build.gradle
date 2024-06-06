@@ -93,7 +93,7 @@ dependencies {
     implementation fg.deobf("curse.maven:apoli-975561:5113129")
     implementation fg.deobf("curse.maven:calio-977891:5126906")
     implementation fg.deobf("curse.maven:caelus-308989:4581481")
-    implementation fg.deobf("curse.maven:cold-sweat-506194:5376143-sources-5376158")
+    implementation fg.deobf("curse.maven:cold-sweat-506194:5387213-sources-5387214")
     implementation fg.deobf("curse.maven:origins-forge-474438:4965917")
 }
 tasks.named('processResources', ProcessResources).configure {
