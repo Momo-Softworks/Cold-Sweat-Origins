@@ -1,6 +1,6 @@
 package com.momosoftworks.coldsweatorigins.event.common;
 
-import com.momosoftworks.coldsweat.api.event.common.TempModifierEvent;
+import com.momosoftworks.coldsweat.api.event.common.temperautre.TempModifierEvent;
 import com.momosoftworks.coldsweat.api.registry.TempModifierRegistry;
 import com.momosoftworks.coldsweatorigins.parsing.OriginModifier;
 import io.github.edwinmindcraft.origins.api.OriginsAPI;
