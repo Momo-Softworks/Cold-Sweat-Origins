@@ -1,11 +1,8 @@
 package com.momosoftworks.coldsweatorigins.parsing;
 
 import com.mojang.serialization.JsonOps;
-import com.momosoftworks.coldsweat.ColdSweat;
 import com.momosoftworks.coldsweatorigins.ColdSweatOrigins;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.GsonHelper;
@@ -22,8 +19,6 @@ import java.util.stream.Collectors;
 @Mod.EventBusSubscriber
 public class OriginAttributesParser
 {
-    public static final ResourceKey<Registry<OriginModifier>> ORIGIN_SETTING_REGISTRY = ResourceKey.createRegistryKey(new ResourceLocation(ColdSweat.MOD_ID, "origin_modifier"));
-
     /**
      * Iterates through the files located in Cold Sweat's data/origin_settings directory and parses them into OriginSettings objects.
      */
@@ -31,7 +26,7 @@ public class OriginAttributesParser
     {
         RegistryAccess registries = server.registryAccess();
 
-        final Map<ResourceLocation, OriginModifier> originSettings = registries.registryOrThrow(ORIGIN_SETTING_REGISTRY)
+        final Map<ResourceLocation, OriginModifier> originSettings = registries.registryOrThrow(ColdSweatOrigins.ORIGIN_SETTING_REGISTRY)
                 .holders()
                 .map(holder ->
                 {
@@ -68,7 +63,7 @@ public class OriginAttributesParser
 
         ColdSweatOrigins.LOGGER.info("Parsed origin settings: " + originSettings);
 
-        OriginModifier.ORIGIN_SETTINGS.putAll(originSettings);
+        ColdSweatOrigins.ORIGIN_SETTINGS.putAll(originSettings);
     }
 
     @SubscribeEvent

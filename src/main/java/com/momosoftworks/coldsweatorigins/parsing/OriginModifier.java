@@ -10,8 +10,6 @@ import java.util.*;
 
 public record OriginModifier(ResourceLocation origin, List<MappedAttribute> baseValues, List<AssignedAttributeModifier> modifiers, List<ResourceLocation> immuneTempModifiers)
 {
-    public static final Map<ResourceLocation, OriginModifier> ORIGIN_SETTINGS = new HashMap<>();
-
     public static final Codec<MappedAttribute> ATTRIBUTE_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("id").forGetter(attr -> ForgeRegistries.ATTRIBUTES.getKey(attr.attribute())),
             Codec.DOUBLE.fieldOf("value").forGetter(MappedAttribute::value)
@@ -25,8 +23,8 @@ public record OriginModifier(ResourceLocation origin, List<MappedAttribute> base
 
     public static final Codec<OriginModifier> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("origin").forGetter(OriginModifier::origin),
-            ATTRIBUTE_CODEC.listOf().fieldOf("attributes").forGetter(OriginModifier::baseValues),
-            MODIFIER_CODEC.listOf().fieldOf("modifiers").forGetter(OriginModifier::modifiers),
+            ATTRIBUTE_CODEC.listOf().optionalFieldOf("attributes", new ArrayList<>()).forGetter(OriginModifier::baseValues),
+            MODIFIER_CODEC.listOf().optionalFieldOf("modifiers", new ArrayList<>()).forGetter(OriginModifier::modifiers),
             ResourceLocation.CODEC.listOf().optionalFieldOf("immune_temp_modifiers", new ArrayList<>()).forGetter(OriginModifier::immuneTempModifiers)
     ).apply(instance, OriginModifier::new));
 }
