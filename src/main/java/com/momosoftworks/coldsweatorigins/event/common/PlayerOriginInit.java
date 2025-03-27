@@ -45,7 +45,7 @@ public class PlayerOriginInit
                             for (AssignedAttributeModifier modifier : settings.modifiers())
                             {
                                 AttributeInstance attribute = player.getAttribute(ForgeRegistries.ATTRIBUTES.getValue(modifier.getAttribute()));
-                                if (attribute != null)
+                                if (attribute != null && !attribute.hasModifier(modifier))
                                 {   attribute.addTransientModifier(modifier);
                                 }
                             }
