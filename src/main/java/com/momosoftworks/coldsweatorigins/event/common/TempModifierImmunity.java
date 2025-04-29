@@ -3,6 +3,7 @@ package com.momosoftworks.coldsweatorigins.event.common;
 import com.momosoftworks.coldsweat.api.event.common.temperautre.TempModifierEvent;
 import com.momosoftworks.coldsweat.api.registry.TempModifierRegistry;
 import com.momosoftworks.coldsweatorigins.ColdSweatOrigins;
+import com.momosoftworks.coldsweatorigins.parsing.OriginModifier;
 import io.github.edwinmindcraft.origins.api.OriginsAPI;
 import io.github.edwinmindcraft.origins.api.capabilities.IOriginContainer;
 import net.minecraft.world.entity.Entity;
@@ -29,10 +30,14 @@ public class TempModifierImmunity
         {
             origins.getOrigins().forEach((layer, origin) ->
             {
-                ColdSweatOrigins.ORIGIN_SETTINGS.computeIfPresent(origin.location(), (org, settings) ->
+                ColdSweatOrigins.ORIGIN_SETTINGS.asMap().computeIfPresent(origin.location(), (org, settings) ->
                 {
-                    if (settings.immuneTempModifiers().contains(TempModifierRegistry.getKey(event.getModifier())))
-                    {   event.setCanceled(true);
+                    for (OriginModifier setting : settings)
+                    {
+                        if (setting.immuneTempModifiers().contains(TempModifierRegistry.getKey(event.getModifier())))
+                        {   event.setCanceled(true);
+                            return settings;
+                        }
                     }
                     return settings;
                 });
@@ -47,11 +52,15 @@ public class TempModifierImmunity
         {
             origins.getOrigins().forEach((layer, origin) ->
             {
-                ColdSweatOrigins.ORIGIN_SETTINGS.computeIfPresent(origin.location(), (org, settings) ->
+                ColdSweatOrigins.ORIGIN_SETTINGS.asMap().computeIfPresent(origin.location(), (org, settings) ->
                 {
-                    if (settings.immuneTempModifiers().contains(TempModifierRegistry.getKey(event.getModifier())))
-                    {   event.getModifier().expires(0);
-                        event.setCanceled(true);
+                    for (OriginModifier setting : settings)
+                    {
+                        if (setting.immuneTempModifiers().contains(TempModifierRegistry.getKey(event.getModifier())))
+                        {   event.getModifier().expires(0);
+                            event.setCanceled(true);
+                            return settings;
+                        }
                     }
                     return settings;
                 });

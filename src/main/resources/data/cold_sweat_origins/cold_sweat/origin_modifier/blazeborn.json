@@ -19,6 +19,11 @@
       "id": "cold_sweat:burning_point",
       "operation": "addition",
       "value": 4
+    },
+    {
+      "id": "cold_sweat:freezing_point",
+      "operation": "addition",
+      "value": 0.4
     }
   ],
   "immune_temp_modifiers": [

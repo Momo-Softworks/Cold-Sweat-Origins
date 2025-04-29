@@ -1,20 +1,11 @@
 package com.momosoftworks.coldsweatorigins.parsing;
 
-import com.mojang.serialization.JsonOps;
+import com.momosoftworks.coldsweat.api.event.core.registry.CreateRegistriesEvent;
+import com.momosoftworks.coldsweat.util.math.CSMath;
 import com.momosoftworks.coldsweatorigins.ColdSweatOrigins;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.GsonHelper;
-import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraft.core.Holder;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.loading.FMLPaths;
-
-import java.io.FileReader;
-import java.nio.file.Path;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber
 public class OriginAttributesParser
@@ -22,52 +13,18 @@ public class OriginAttributesParser
     /**
      * Iterates through the files located in Cold Sweat's data/origin_settings directory and parses them into OriginSettings objects.
      */
-    public static void parseAllSettings(MinecraftServer server)
-    {
-        RegistryAccess registries = server.registryAccess();
-
-        final Map<ResourceLocation, OriginModifier> originSettings = registries.registryOrThrow(ColdSweatOrigins.ORIGIN_SETTING_REGISTRY)
-                .holders()
-                .map(holder ->
-                {
-                    OriginModifier settings = holder.get();
-                    ResourceLocation location = holder.get().origin();
-                    return Map.entry(location, settings);
-                })
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-        Path configPath = FMLPaths.CONFIGDIR.get();
-        Path originSettingsPath = configPath.resolve("coldsweat/data/origin_settings");
-        try
-        {
-            for (String file : originSettingsPath.toFile().list())
-            {
-                if (file.endsWith(".json"))
-                {
-                    try (FileReader reader = new FileReader(originSettingsPath.resolve(file).toFile()))
-                    {
-                        OriginModifier.CODEC.parse(JsonOps.INSTANCE, GsonHelper.parse(reader))
-                                .resultOrPartial(ColdSweatOrigins.LOGGER::error)
-                                .ifPresent(modifier -> originSettings.put(modifier.origin(), modifier));
-                    }
-                    catch (Exception e)
-                    {   ColdSweatOrigins.LOGGER.error("Failed to parse origin settings: " + e);
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            ColdSweatOrigins.LOGGER.error("Failed to parse origin settings: " + e.getMessage());
-        }
-
-        ColdSweatOrigins.LOGGER.info("Parsed origin settings: " + originSettings);
-
-        ColdSweatOrigins.ORIGIN_SETTINGS.putAll(originSettings);
-    }
-
     @SubscribeEvent
-    public static void onServerStarted(ServerStartedEvent event)
-    {   parseAllSettings(event.getServer());
+    public static void parseAllSettings(CreateRegistriesEvent.Post event)
+    {
+        long start = System.nanoTime();
+
+        ColdSweatOrigins.ORIGIN_SETTINGS.clear();
+        for (Holder<OriginModifier> holder : event.getRegistry(ColdSweatOrigins.ORIGIN_SETTING_REGISTRY))
+        {
+            OriginModifier modifier = holder.value();
+            ColdSweatOrigins.ORIGIN_SETTINGS.put(modifier.origin(), modifier);
+        }
+
+        ColdSweatOrigins.LOGGER.info("Parsed origin settings in %s ms", CSMath.truncate((System.nanoTime() - start) / 1_000_000d, 2));
     }
 }

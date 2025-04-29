@@ -5,6 +5,7 @@ import com.momosoftworks.coldsweat.core.event.TaskScheduler;
 import com.momosoftworks.coldsweatorigins.ColdSweatOrigins;
 import com.momosoftworks.coldsweatorigins.parsing.AssignedAttributeModifier;
 import com.momosoftworks.coldsweatorigins.parsing.MappedAttribute;
+import com.momosoftworks.coldsweatorigins.parsing.OriginModifier;
 import io.github.edwinmindcraft.origins.api.OriginsAPI;
 import io.github.edwinmindcraft.origins.api.origin.Origin;
 import io.github.edwinmindcraft.origins.api.origin.OriginLayer;
@@ -30,9 +31,9 @@ public class PlayerOriginInit
             {
                 forEachOrigin(player, (layer, origin) ->
                 {
-                    ColdSweatOrigins.ORIGIN_SETTINGS.computeIfPresent(origin.location(), (org, settings) ->
+                    TaskScheduler.scheduleServer(() ->
                     {
-                        TaskScheduler.scheduleServer(() ->
+                        for (OriginModifier settings : ColdSweatOrigins.ORIGIN_SETTINGS.get(origin.location()))
                         {
                             ColdSweatOrigins.LOGGER.info("Applying origin settings for %s to %s", origin.location(), player.getName().getString());
                             for (MappedAttribute settingAttribute : settings.baseValues())
@@ -49,11 +50,8 @@ public class PlayerOriginInit
                                 {   attribute.addTransientModifier(modifier);
                                 }
                             }
-                        }, 5);
-                        player.getPersistentData().putString("CurrentOrigin", origin.location().toString());
-
-                        return settings;
-                    });
+                        }
+                    }, 5);
                 });
             });
         }
