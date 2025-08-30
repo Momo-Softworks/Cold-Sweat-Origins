@@ -1,6 +1,6 @@
 package com.momosoftworks.coldsweatorigins.parsing;
 
-import com.momosoftworks.coldsweat.api.event.core.registry.CreateRegistriesEvent;
+import com.momosoftworks.coldsweat.api.event.core.registry.LoadRegistriesEvent;
 import com.momosoftworks.coldsweat.util.math.CSMath;
 import com.momosoftworks.coldsweatorigins.ColdSweatOrigins;
 import net.minecraft.core.Holder;
@@ -14,7 +14,7 @@ public class OriginAttributesParser
      * Iterates through the files located in Cold Sweat's data/origin_settings directory and parses them into OriginSettings objects.
      */
     @SubscribeEvent
-    public static void parseAllSettings(CreateRegistriesEvent.Post event)
+    public static void parseAllSettings(LoadRegistriesEvent.Post event)
     {
         long start = System.nanoTime();
 

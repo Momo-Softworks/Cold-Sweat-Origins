@@ -12,12 +12,12 @@ buildscript {
 plugins {
     id 'eclipse'
     id 'idea'
-    id 'net.neoforged.gradle' version '[6.0.13, 6.2)'
+    id 'net.minecraftforge.gradle' version '6+'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
 apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'net.neoforged.gradle'
+apply plugin: 'net.minecraftforge.gradle'
 
 group = mod_group_id
 version = mod_version
@@ -87,13 +87,13 @@ mixin {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft "net.neoforged:forge:${minecraft_version}-${forge_version}"
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     implementation fg.deobf("curse.maven:apoli-975561:5113129")
     implementation fg.deobf("curse.maven:calio-977891:5126906")
     implementation fg.deobf("curse.maven:caelus-308989:4581481")
-    implementation fg.deobf("curse.maven:cold-sweat-506194:6340356-sources-6340357")
+    implementation fg.deobf("curse.maven:cold-sweat-506194:6934636-sources-6939646")
     implementation fg.deobf("curse.maven:origins-forge-474438:4965917")
 }
 tasks.named('processResources', ProcessResources).configure {

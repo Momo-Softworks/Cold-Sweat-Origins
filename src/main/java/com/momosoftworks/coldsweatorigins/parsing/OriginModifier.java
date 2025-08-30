@@ -3,6 +3,7 @@ package com.momosoftworks.coldsweatorigins.parsing;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.momosoftworks.coldsweat.data.codec.impl.ConfigData;
+import com.momosoftworks.coldsweat.data.codec.util.NegatableList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
@@ -15,7 +16,7 @@ public class OriginModifier extends ConfigData
     private final List<AssignedAttributeModifier> modifiers;
     private final List<ResourceLocation> immuneTempModifiers;
 
-    public OriginModifier(ResourceLocation origin, List<MappedAttribute> baseValues, List<AssignedAttributeModifier> modifiers, List<ResourceLocation> immuneTempModifiers, List<String> requiredMods)
+    public OriginModifier(ResourceLocation origin, List<MappedAttribute> baseValues, List<AssignedAttributeModifier> modifiers, List<ResourceLocation> immuneTempModifiers, NegatableList<String> requiredMods)
     {
         super(requiredMods);
         this.origin = origin;
@@ -25,7 +26,7 @@ public class OriginModifier extends ConfigData
     }
 
     public OriginModifier(ResourceLocation origin, List<MappedAttribute> baseValues, List<AssignedAttributeModifier> modifiers, List<ResourceLocation> immuneTempModifiers)
-    {   this(origin, baseValues, modifiers, immuneTempModifiers, List.of());
+    {   this(origin, baseValues, modifiers, immuneTempModifiers, new NegatableList<>());
     }
 
     public static final Codec<AssignedAttributeModifier> MODIFIER_CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -39,7 +40,7 @@ public class OriginModifier extends ConfigData
             MappedAttribute.CODEC.listOf().optionalFieldOf("attributes", List.of()).forGetter(OriginModifier::baseValues),
             MODIFIER_CODEC.listOf().optionalFieldOf("modifiers", List.of()).forGetter(OriginModifier::modifiers),
             ResourceLocation.CODEC.listOf().optionalFieldOf("immune_temp_modifiers", List.of()).forGetter(OriginModifier::immuneTempModifiers),
-            Codec.STRING.listOf().optionalFieldOf("required_mods", List.of()).forGetter(OriginModifier::requiredMods)
+            NegatableList.listCodec(Codec.STRING).optionalFieldOf("required_mods", new NegatableList<>()).forGetter(OriginModifier::requiredMods)
     ).apply(instance, OriginModifier::new));
 
     public ResourceLocation origin()
